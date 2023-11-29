@@ -14,10 +14,10 @@ class EdibilitySeeder extends Seeder
     public function run(): void
     {
         $edibilities = [
-            'Psychedelic',
             'Edible',
             'Inedible',
             'Poisonous',
+            'Psychedelic',
         ];
 
         foreach ($edibilities as $edibility) {
