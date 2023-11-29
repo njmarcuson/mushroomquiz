@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Quiz extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function questions(): HasMany
     {
@@ -23,6 +24,6 @@ class Quiz extends Model
 
     public function locations(): BelongsToMany
     {
-        return $this->belongsToMany(Locations::class, 'quiz_locations');
+        return $this->belongsToMany(Location::class, 'quiz_locations');
     }
 }

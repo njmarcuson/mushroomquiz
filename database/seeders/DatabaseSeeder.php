@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             EdibilitySeeder::class,
             MushroomSeeder::class,
+            DifficultySeeder::class,
         ]);
     }
 }
