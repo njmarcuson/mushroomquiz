@@ -1,3 +1,7 @@
+- Install tailwind
+- Design front page
+
+
 FRONTEND
 - Quiz start
     - Options to select different locations and edibility
