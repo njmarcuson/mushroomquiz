@@ -15,7 +15,9 @@
 </head>
 
 <body class="bg-cs-grey font-rubik">
-    <div id="app" edibilities="{{ $edibilities }}" locations="{{ $locations }}" difficulties="{{ $difficulties }}">
+    @csrf
+    <div id="app" edibilities="{{ $edibilities }}" locations="{{ $locations }}" difficulties="{{ $difficulties }}"
+        token="{{ $token }}">
     </div>
 </body>
 

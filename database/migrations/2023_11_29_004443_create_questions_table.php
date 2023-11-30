@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique();
             $table->foreignId('quiz_id')->constrained();
-            $table->foreignId('answered_mushroom_id')->constrained('mushrooms');
+            $table->foreignId('answered_mushroom_id')->constrained('mushrooms')->nullable();
             $table->timestamps();
         });
     }

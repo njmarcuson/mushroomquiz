@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 
 import HomePage from './components/HomePage';
 import { QuizContext } from './context/QuizContext';
+import Quiz from './components/Quiz';
 
 App.propTypes = {
     edibilities: PropTypes.string.isRequired,
     locations: PropTypes.string.isRequired,
     difficulties: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
 };
 
 export default function App(props) {
@@ -24,18 +26,33 @@ export default function App(props) {
         JSON.parse(props.difficulties)
     );
 
+    const [isQuizActive, setIsQuizActive] = useState(false);
+
+    const [token] = useState(props.token);
+
+    const [quiz, setQuiz] = useState([]);
+
     return (
         <QuizContext.Provider
             value={{
+                quiz,
+                setQuiz,
+                isQuizActive,
+                setIsQuizActive,
                 edibilities,
                 setEdibilities,
                 locations,
                 setLocations,
                 difficulties,
                 setDifficulties,
+                token,
             }}
         >
-            <HomePage />
+            <h1 className="text-6xl font-black text-center mt-10 mb-5">
+                Mushroom Quiz
+            </h1>
+            {isQuizActive && <Quiz />}
+            {!isQuizActive && <HomePage />}
         </QuizContext.Provider>
     );
 }
@@ -49,11 +66,13 @@ if (document.getElementById('app')) {
     const difficulties = document
         .getElementById('app')
         .getAttribute('difficulties');
+    const token = document.getElementById('app').getAttribute('token');
     root.render(
         <App
             edibilities={edibilities}
             locations={locations}
             difficulties={difficulties}
+            token={token}
         />
     );
 }

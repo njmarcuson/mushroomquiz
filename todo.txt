@@ -1,5 +1,11 @@
-- Install tailwind
-- Design front page
+TO DO
+- Add submit button
+    - Onclick sends Post request to Quiz adds a quiz element to table
+    - Receives data for each question q = {m1, m2, m3, m4} 
+        where mn = {sci_name, pop_names, edibility, edibility_notes, locations, is_correct}
+- Prettify quiz option parameters
+    - Add fun little images
+    - Space them out better
 
 
 FRONTEND

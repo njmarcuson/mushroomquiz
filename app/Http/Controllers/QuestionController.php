@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -20,15 +21,15 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Quiz $quiz)
     {
-        //
+        Question::generateQuestions($quiz);
     }
 
     /**

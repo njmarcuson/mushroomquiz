@@ -8,7 +8,9 @@ use App\Models\Location;
 use App\Models\Quiz;
 use App\Traits\IsMobileUserTrait;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Stringable;
 
 class QuizController extends Controller
 {
@@ -22,6 +24,7 @@ class QuizController extends Controller
             'edibilities' => $this->addIsClicked(Edibility::all()),
             'locations' => $this->addIsClicked(Location::all()),
             'difficulties' => $this->addIsClicked(Difficulty::all()),
+            'token' => csrf_token(),
         ]);
     }
 
@@ -37,17 +40,17 @@ class QuizController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 
      */
     public function create()
     {
-        //
+        
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created quiz.
      */
-    public function store(Request $request, Difficulty $difficulty)
+    public function store(Request $request)
     {
 
         $locations = Location::find(explode(',', $request->get('locations')));
@@ -60,13 +63,17 @@ class QuizController extends Controller
             abort(404);
         }
 
+        $difficulty = Difficulty::find($request->get('difficulty'));
         $quiz = Quiz::create([
+            'slug' => uniqid() . Str::random(10),
             'difficulty_id' => $difficulty->id,
             'is_mobile' => self::isMobileUser(),
         ]);
 
         $quiz->edibilities()->attach($edibilities);
         $quiz->locations()->attach($locations);
+
+        return $quiz->slug;
 
     }
 
