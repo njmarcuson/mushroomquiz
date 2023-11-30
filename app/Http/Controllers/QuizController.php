@@ -7,17 +7,33 @@ use App\Models\Edibility;
 use App\Models\Location;
 use App\Models\Quiz;
 use App\Traits\IsMobileUserTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
     use IsMobileUserTrait;
     /**
-     * Display a listing of the resource.
+     * Display the app.
      */
     public function index()
     {
-        //
+        return view('app', [
+            'edibilities' => $this->addIsClicked(Edibility::all()),
+            'locations' => $this->addIsClicked(Location::all()),
+            'difficulties' => $this->addIsClicked(Difficulty::all()),
+        ]);
+    }
+
+    private function addIsClicked(Collection $collection): string
+    {
+        $arrays = $collection->toArray();
+        for ($i=0; $i<count($arrays); $i++) {
+            $arrays[$i]['isClicked'] = false;
+            unset($arrays[$i]['created_at']);
+            unset($arrays[$i]['updated_at']);
+        }
+        return json_encode($arrays);
     }
 
     /**

@@ -15,7 +15,8 @@
 </head>
 
 <body class="bg-cs-grey font-rubik">
-    <div id="app"></div>
+    <div id="app" edibilities="{{ $edibilities }}" locations="{{ $locations }}" difficulties="{{ $difficulties }}">
+    </div>
 </body>
 
 </html>

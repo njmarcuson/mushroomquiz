@@ -15,9 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('app');
-});
+// only route that users will access
+Route::get('/', [QuizController::class, 'index']);
 
 Route::get('/api/storequiz/difficulty/{difficulty:id}', [QuizController::class, 'store']);
 
