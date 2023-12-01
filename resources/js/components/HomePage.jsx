@@ -14,11 +14,21 @@ export default function HomePage() {
         );
     }
 
+    function getSelectedParameterIds(parameters) {
+        let paramIds = [];
+        for (let i = 0; i < parameters.length; i++) {
+            if (parameters[i]['isClicked']) {
+                paramIds.push(parameters[i]['id']);
+            }
+        }
+        return paramIds.join(',');
+    }
+
     function startQuiz() {
         const data = {
-            edibilities: '1,2',
-            locations: '1,2,3',
-            difficulty: '1',
+            edibilities: getSelectedParameterIds(edibilities),
+            locations: getSelectedParameterIds(locations),
+            difficulty: getSelectedParameterIds(difficulties),
             _token: token,
         };
         fetch('/api/storequiz', {

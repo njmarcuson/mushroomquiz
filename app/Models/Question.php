@@ -29,23 +29,23 @@ class Question extends Model
         return $this->hasOne(Mushroom::class, 'answered_mushroom_id');
     }
 
-    public static function generateQuestions(Quiz $quiz): array
+    public static function generateQuestions(Quiz $quiz): string
     {
         $edibilities = $quiz->edibilities->pluck('id');
         $locations = $quiz->locations->pluck('id');
         $difficulty = $quiz->difficulty->name;
 
-        $possibleCorrectMushrooms = Mushroom::whereIn('edibility_id', $edibilities)
+        $possibleCorrectMushrooms = Mushroom::with('edibility')
+            ->whereIn('edibility_id', $edibilities)
             ->whereHas('locations', function($q) use($locations) {
             $q->whereIn('location_id', $locations);
         })->get();
 
         $correctMushrooms = $possibleCorrectMushrooms->random(10)->shuffle();
+        $allMushrooms = Mushroom::with('edibility')->get();
 
-        $allMushrooms = Mushroom::all();
+        $questions = [];
 
-        // foreach correct mushroom, we need to get the incorrect mushrooms
-        // this will vary by difficulty
         foreach ($correctMushrooms as $correctMushroom) {
 
             $mushroomPool = $allMushrooms->where('id', '!=', $correctMushroom->id);
@@ -57,25 +57,45 @@ class Question extends Model
 
             // at least one incorrect mushroom must be the same edibility
             if ($difficulty == "Medium") {
-                $incorrectMushroomSameEdibility = $mushroomPool->where('edibility_id', $correctMushroom->edibility_id)->random(1);
-                $incorrectMushroomsAllPool =  $mushroomPool->random(2);
-                $incorrectMushrooms = $incorrectMushroomSameEdibility->merge($incorrectMushroomsAllPool);
+                $incorrectMushrooms = $mushroomPool->random(2);
+                $incorrectMushrooms->push($mushroomPool->
+                    where('edibility_id', $correctMushroom->edibility_id)
+                    ->random(1)->first());
             }
 
             // all incorrect mushrooms are the same edibility
             if ($difficulty == "Hard") {
-                $incorrectMushrooms = $mushroomPool->where('edibility_id', $correctMushroom->edibility_id)->random(3);
+                $incorrectMushrooms = $mushroomPool->
+                    where('edibility_id', $correctMushroom->edibility_id)
+                    ->random(3);
             }
 
-            $incorrectMushrooms = $incorrectMushrooms->shuffle();
+            $mushroomsInQuestion = collect($incorrectMushrooms);
+            $mushroomsInQuestion->push($correctMushroom);
 
-            echo $incorrectMushrooms . "<br><br>";
+            $question = [];
 
+            foreach ($mushroomsInQuestion as $mushroomInQuestion) {
+                $mushroomArray = [
+                    'id' => $mushroomInQuestion->id,
+                    'scientific_name' => $mushroomInQuestion->scientific_name,
+                    'popular_name1' => $mushroomInQuestion->popular_name1,
+                    'popular_name2' => $mushroomInQuestion->popular_name2,
+                    'popular_name3' => $mushroomInQuestion->popular_name3,
+                    'edibility' => $mushroomInQuestion->edibility->name,
+                    'edibility_notes' => $mushroomInQuestion->edibility_notes,
+                    'is_correct' => $mushroomInQuestion->id == $correctMushroom->id,
+                ];
+                
+                array_push($question, $mushroomArray);
+            }
+
+            shuffle($question);
+
+            array_push($questions, $question);
         }
-
         
-
-        ddd('test');
+        return json_encode($questions);
 
     }
 }

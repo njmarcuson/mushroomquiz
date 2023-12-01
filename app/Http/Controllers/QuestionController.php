@@ -29,7 +29,7 @@ class QuestionController extends Controller
      */
     public function store(Request $request, Quiz $quiz)
     {
-        Question::generateQuestions($quiz);
+        return Question::generateQuestions($quiz);
     }
 
     /**
