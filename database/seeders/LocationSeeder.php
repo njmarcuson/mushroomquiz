@@ -16,10 +16,10 @@ class LocationSeeder extends Seeder
         $locations = [
             'North America',
             'South America',
+            'Africa',
             'Europe',
             'Asia',
-            'Africa',
-            'Pacific Islands',
+            'Oceania',
         ];
 
         foreach ($locations as $location) {

@@ -1,12 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { QuizContext } from '../context/QuizContext';
 
 function Quiz() {
+    const { quiz, setQuiz, quizSlug, token } = useContext(QuizContext);
+
     useEffect(() => {
-        // this needs to fetch from THIS api to get the 10 questions
-        // then it needs to fetch from MO api to get the 4 images
+        const data = {
+            _token: token,
+            quizSlug: quizSlug,
+        };
+
+        fetch('/api/getquestions', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setQuiz(data);
+            });
     }, []);
 
-    return <div>Quiz is being taken</div>;
+    return <div>{quiz ? 'Quiz Loaded' : 'Loading...'}</div>;
 }
 
 export default Quiz;

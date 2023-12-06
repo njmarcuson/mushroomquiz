@@ -8,6 +8,7 @@ use App\Models\Mushroom;
 use App\Models\Location;
 use App\Models\MushroomLocation;
 use App\Models\Edibility;
+use PDO;
 
 class MushroomSeeder extends Seeder
 {
@@ -47,6 +48,10 @@ class MushroomSeeder extends Seeder
             for ($i=9; $i<=14; $i++) {
                 if ($data[$i] == "") {
                     continue;
+                }
+
+                if ($data[$i] == "Pacific Islands") {
+                    $data[$i] = "Oceania";
                 }
 
                 $location = Location::where('name', $data[$i])->first();

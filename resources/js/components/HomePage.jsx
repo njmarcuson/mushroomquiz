@@ -3,8 +3,14 @@ import { QuizContext } from '../context/QuizContext';
 import QuizParameterQuestion from './QuizParameterQuestion';
 
 export default function HomePage() {
-    const { edibilities, locations, difficulties, setIsQuizActive, token } =
-        useContext(QuizContext);
+    const {
+        edibilities,
+        locations,
+        difficulties,
+        setQuizSlug,
+        setIsQuizActive,
+        token,
+    } = useContext(QuizContext);
 
     function isQuizButtonDisabled() {
         return (
@@ -37,12 +43,23 @@ export default function HomePage() {
             headers: {
                 'Content-type': 'application/json; charset=UTF-8',
             },
-        }).then(() => setIsQuizActive(true));
+        })
+            .then(response => response.json())
+            .then(data => {
+                setQuizSlug(data);
+                setIsQuizActive(true);
+            });
     }
 
     return (
         <>
-            <h2 className="text-2xl text-center mb-10">
+            <div className="fixed w-full top-0 pr-8 bg-cs-grey z-10">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-center mt-10 mb-5">
+                    Mushroom Quiz
+                </h1>
+            </div>
+
+            <h2 className="text-l md:text-xl lg-text-2xl text-center mb-10 mt-32">
                 The quiz engine that helps you identify mushrooms with real
                 world images
             </h2>
@@ -51,7 +68,7 @@ export default function HomePage() {
             <QuizParameterQuestion values={locations} type="location" />
             <QuizParameterQuestion values={difficulties} type="difficulty" />
 
-            <div className="flex justify-center mt-10">
+            <div className="flex justify-center mt-6">
                 <button
                     className={`bg-cs-green rounded px-10 py-4 ${
                         isQuizButtonDisabled()

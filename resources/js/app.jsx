@@ -30,13 +30,17 @@ export default function App(props) {
 
     const [token] = useState(props.token);
 
-    const [quiz, setQuiz] = useState([]);
+    const [quiz, setQuiz] = useState();
+
+    const [quizSlug, setQuizSlug] = useState();
 
     return (
         <QuizContext.Provider
             value={{
                 quiz,
                 setQuiz,
+                quizSlug,
+                setQuizSlug,
                 isQuizActive,
                 setIsQuizActive,
                 edibilities,
@@ -48,9 +52,6 @@ export default function App(props) {
                 token,
             }}
         >
-            <h1 className="text-6xl font-black text-center mt-10 mb-5">
-                Mushroom Quiz
-            </h1>
             {isQuizActive && <Quiz />}
             {!isQuizActive && <HomePage />}
         </QuizContext.Provider>

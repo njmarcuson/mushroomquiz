@@ -5,6 +5,7 @@ import { QuizContext } from '../context/QuizContext';
 QuizParameterButton.propTypes = {
     value: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
+    emoji: PropTypes.string,
 };
 
 function QuizParameterButton(props) {
@@ -52,15 +53,16 @@ function QuizParameterButton(props) {
 
     return (
         <button
-            className={`mx-4 rounded bg-cs-blue ${
+            className={`mx-4 mb-4 rounded-2xl bg-cs-blue py-3 ${
                 props.value.isClicked
                     ? 'outline outline-2 outline-cs-darkred'
                     : 'opacity-50 hover:opacity-70'
             }`}
-            id={props.value.id}
+            id={props.value.name}
             onClick={() => toggleButtonClick(props.value.id)}
         >
             {props.value.name}
+            {props.emoji && <div className="text-6xl mt-2">{props.emoji}</div>}
         </button>
     );
 }

@@ -73,7 +73,7 @@ class QuizController extends Controller
         $quiz->edibilities()->attach($edibilities);
         $quiz->locations()->attach($locations);
 
-        return $quiz->slug;
+        return json_encode($quiz->slug);
 
     }
 

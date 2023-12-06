@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [QuizController::class, 'index']);
 
 
-Route::get('/api/getquestions/{quiz:slug}', [QuestionController::class, 'store']);
+Route::post('/api/getquestions', [QuestionController::class, 'store']);
 Route::post('/api/storequiz', [QuizController::class, 'store']);
 
 Route::get('/admin-login', [LoginController::class, 'show']);

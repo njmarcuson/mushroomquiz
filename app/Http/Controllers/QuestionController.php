@@ -27,8 +27,9 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Quiz $quiz)
+    public function store(Request $request)
     {
+        $quiz = Quiz::where('slug', $request->input('quizSlug'))->first();
         return Question::generateQuestions($quiz);
     }
 

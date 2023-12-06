@@ -14,11 +14,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-cs-grey font-rubik">
+<body class="bg-cs-grey font-rubik mx-4 mb-10">
     @csrf
     <div id="app" edibilities="{{ $edibilities }}" locations="{{ $locations }}" difficulties="{{ $difficulties }}"
         token="{{ $token }}">
     </div>
+    <div id="Psychedelic">asdfadsfadsf</div>
 </body>
 
 </html>
