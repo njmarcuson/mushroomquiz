@@ -33,6 +33,9 @@ export default function App(props) {
     const [quiz, setQuiz] = useState();
     const [quizSlug, setQuizSlug] = useState();
 
+    const [isFirstQuestionLoaded, setIsFirstQuestionLoaded] = useState(false);
+    const [questionOrder, setQuestionOrder] = useState([]);
+
     const queryClient = new QueryClient();
 
     return (
@@ -43,6 +46,10 @@ export default function App(props) {
                     setQuiz,
                     quizSlug,
                     setQuizSlug,
+                    isFirstQuestionLoaded,
+                    setIsFirstQuestionLoaded,
+                    questionOrder,
+                    setQuestionOrder,
                     currentPage,
                     setCurrentPage,
                     edibilities,

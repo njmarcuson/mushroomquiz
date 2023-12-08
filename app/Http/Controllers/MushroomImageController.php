@@ -29,10 +29,12 @@ class MushroomImageController extends Controller
         $sliceLength = (count($observations)) < 10 ? count($observations) : 10;
         $observations = array_slice($observations, 0, $sliceLength);
 
+        $imageCount = $sliceLength < 4 ? $sliceLength : 4;
+
         // get the random 4 
         // return 4 image ids
         $imageIds = [];
-        for ($i=0; $i<4; $i++) {
+        for ($i=0; $i<$imageCount; $i++) {
             $randomIndex = rand(0, count($observations)-1);
             array_push($imageIds, $observations[$randomIndex]['primary_image']['id']);
             array_splice($observations, $randomIndex, 1);
