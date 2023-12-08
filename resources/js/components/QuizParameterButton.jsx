@@ -53,16 +53,22 @@ function QuizParameterButton(props) {
 
     return (
         <button
-            className={`mx-4 mb-4 rounded-2xl bg-cs-blue py-3 ${
-                props.value.isClicked
-                    ? 'outline outline-2 outline-cs-darkred'
-                    : 'opacity-50 hover:opacity-70'
-            }`}
+            className={`parameter-button relative py-3 w-full font-semibold outline outline-2 outline-cs-darkred
+                 shadow-2xl h-full z-40 text-xl relative transition-opacity
+                 rounded-2xl ${
+                     props.value.isClicked
+                         ? 'parameter-button-active opacity-90 hover:opacity-100 focus:opacity-100'
+                         : 'opacity-40 hover:opacity-60 hover:outline-3 focus:opacity-60 focus:outline-3'
+                 }`}
             id={props.value.name}
             onClick={() => toggleButtonClick(props.value.id)}
         >
-            {props.value.name}
-            {props.emoji && <div className="text-6xl mt-2">{props.emoji}</div>}
+            <span className="">
+                {props.value.name}
+                {props.emoji && (
+                    <div className="text-6xl mt-2">{props.emoji}</div>
+                )}
+            </span>
         </button>
     );
 }

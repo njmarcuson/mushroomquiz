@@ -8,6 +8,8 @@ import HomePage from './components/HomePage';
 import { QuizContext } from './context/QuizContext';
 import Quiz from './components/Quiz';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 App.propTypes = {
     edibilities: PropTypes.string.isRequired,
     locations: PropTypes.string.isRequired,
@@ -26,35 +28,36 @@ export default function App(props) {
         JSON.parse(props.difficulties)
     );
 
-    const [isQuizActive, setIsQuizActive] = useState(false);
-
+    const [currentPage, setCurrentPage] = useState('edibilities');
     const [token] = useState(props.token);
-
     const [quiz, setQuiz] = useState();
-
     const [quizSlug, setQuizSlug] = useState();
 
+    const queryClient = new QueryClient();
+
     return (
-        <QuizContext.Provider
-            value={{
-                quiz,
-                setQuiz,
-                quizSlug,
-                setQuizSlug,
-                isQuizActive,
-                setIsQuizActive,
-                edibilities,
-                setEdibilities,
-                locations,
-                setLocations,
-                difficulties,
-                setDifficulties,
-                token,
-            }}
-        >
-            {isQuizActive && <Quiz />}
-            {!isQuizActive && <HomePage />}
-        </QuizContext.Provider>
+        <QueryClientProvider client={queryClient}>
+            <QuizContext.Provider
+                value={{
+                    quiz,
+                    setQuiz,
+                    quizSlug,
+                    setQuizSlug,
+                    currentPage,
+                    setCurrentPage,
+                    edibilities,
+                    setEdibilities,
+                    locations,
+                    setLocations,
+                    difficulties,
+                    setDifficulties,
+                    token,
+                }}
+            >
+                {currentPage == 'Quiz' && <Quiz />}
+                {currentPage != 'Quiz' && <HomePage />}
+            </QuizContext.Provider>
+        </QueryClientProvider>
     );
 }
 

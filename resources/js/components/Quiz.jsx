@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { QuizContext } from '../context/QuizContext';
+import QuizQuestions from './QuizQuestions';
 
 function Quiz() {
     const { quiz, setQuiz, quizSlug, token } = useContext(QuizContext);
@@ -24,7 +25,7 @@ function Quiz() {
             });
     }, []);
 
-    return <div>{quiz ? 'Quiz Loaded' : 'Loading...'}</div>;
+    return <div>{quiz ? <QuizQuestions /> : 'Loading...'}</div>;
 }
 
 export default Quiz;

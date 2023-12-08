@@ -1,55 +1,21 @@
 import React, { useContext } from 'react';
 import { QuizContext } from '../context/QuizContext';
-import QuizParameterQuestion from './QuizParameterQuestion';
+import { CSSTransition } from 'react-transition-group';
+import EdibilitiesQuestion from './EdibilitiesQuestion';
+import LocationsQuestion from './LocationsQuestion';
+import DifficultiesQuestion from './DifficultiesQuestion';
 
 export default function HomePage() {
-    const {
-        edibilities,
-        locations,
-        difficulties,
-        setQuizSlug,
-        setIsQuizActive,
-        token,
-    } = useContext(QuizContext);
+    const { currentPage } = useContext(QuizContext);
 
-    function isQuizButtonDisabled() {
-        return (
-            edibilities.filter(edibility => edibility.isClicked).length == 0 ||
-            locations.filter(location => location.isClicked).length == 0 ||
-            difficulties.filter(difficulty => difficulty.isClicked).length == 0
-        );
-    }
-
-    function getSelectedParameterIds(parameters) {
-        let paramIds = [];
-        for (let i = 0; i < parameters.length; i++) {
-            if (parameters[i]['isClicked']) {
-                paramIds.push(parameters[i]['id']);
-            }
-        }
-        return paramIds.join(',');
-    }
-
-    function startQuiz() {
-        const data = {
-            edibilities: getSelectedParameterIds(edibilities),
-            locations: getSelectedParameterIds(locations),
-            difficulty: getSelectedParameterIds(difficulties),
-            _token: token,
-        };
-        fetch('/api/storequiz', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                setQuizSlug(data);
-                setIsQuizActive(true);
-            });
-    }
+    const classNames = {
+        appear: 'opacity-0 transition-opacity duration-300',
+        appearActive: 'transition-opacity duration-300 opacity-100',
+        enter: 'opacity-0 -translate-x-full',
+        enterActive: 'transition-opacity duration-300 opacity-100',
+        // exit: "opacity-100",  // this breaks the exit transition
+        exitActive: 'transition-opacity duration-300 opacity-0',
+    };
 
     return (
         <>
@@ -64,10 +30,48 @@ export default function HomePage() {
                 world images
             </h2>
 
-            <QuizParameterQuestion values={edibilities} type="edibility" />
-            <QuizParameterQuestion values={locations} type="location" />
-            <QuizParameterQuestion values={difficulties} type="difficulty" />
+            <CSSTransition
+                in={currentPage == 'edibilities'}
+                timeout={300}
+                classNames={classNames}
+                unmountOnExit
+            >
+                <EdibilitiesQuestion />
+            </CSSTransition>
 
+            <CSSTransition
+                in={currentPage == 'locations'}
+                timeout={300}
+                classNames={classNames}
+                unmountOnExit
+            >
+                <LocationsQuestion />
+            </CSSTransition>
+
+            <CSSTransition
+                in={currentPage == 'difficulties'}
+                timeout={300}
+                classNames={classNames}
+                unmountOnExit
+            >
+                <DifficultiesQuestion />
+            </CSSTransition>
+
+            {/*
+            {currentPage == 'Edibilities' && (
+                <QuizParameterQuestion values={edibilities} type="edibility" />
+            )}
+            {currentPage == 'Locations' && (
+                <QuizParameterQuestion values={locations} type="location" />
+            )}
+            {currentPage == 'Difficulties' && (
+                <QuizParameterQuestion
+                    values={difficulties}
+                    type="difficulty"
+                />
+            )}
+            */}
+            {/*
             <div className="flex justify-center mt-6">
                 <button
                     className={`bg-cs-green rounded px-10 py-4 ${
@@ -81,6 +85,7 @@ export default function HomePage() {
                     Take Quiz!
                 </button>
             </div>
+            */}
         </>
     );
 }
