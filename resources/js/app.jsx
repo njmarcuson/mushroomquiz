@@ -1,6 +1,6 @@
 import './bootstrap';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
 
@@ -35,8 +35,15 @@ export default function App(props) {
 
     const [isFirstQuestionLoaded, setIsFirstQuestionLoaded] = useState(false);
     const [questionOrder, setQuestionOrder] = useState([]);
+    const [questionOn, setQuestionOn] = useState();
+
+    const [totalQuestionsLoaded, setTotalQuestionsLoaded] = useState(0);
 
     const queryClient = new QueryClient();
+
+    useEffect(() => {
+        setCurrentPage('edibilities');
+    }, []);
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -50,6 +57,10 @@ export default function App(props) {
                     setIsFirstQuestionLoaded,
                     questionOrder,
                     setQuestionOrder,
+                    questionOn,
+                    setQuestionOn,
+                    totalQuestionsLoaded,
+                    setTotalQuestionsLoaded,
                     currentPage,
                     setCurrentPage,
                     edibilities,

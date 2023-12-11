@@ -10,6 +10,8 @@ function Quiz() {
         isFirstQuestionLoaded,
         setIsFirstQuestionLoaded,
         setQuestionOrder,
+        setQuestionOn,
+        setTotalQuestionsLoaded,
     } = useContext(QuizContext);
 
     useEffect(() => {
@@ -52,8 +54,17 @@ function Quiz() {
             });
     }
 
+    let firstQuestionsImagesAdded = false;
     function addImagesToQuiz(imageIds, questionIndex) {
-        setIsFirstQuestionLoaded(true);
+        if (firstQuestionsImagesAdded == false) {
+            console.log('HERE');
+            setQuestionOn(0);
+            setIsFirstQuestionLoaded(true);
+            firstQuestionsImagesAdded = true;
+        }
+
+        setTotalQuestionsLoaded(val => val + 1);
+
         setQuestionOrder(previousQuestionOrder => {
             previousQuestionOrder.push(questionIndex);
             return previousQuestionOrder;
