@@ -30,6 +30,7 @@ function Quiz() {
             .then(response => response.json())
             .then(data => {
                 setQuiz(data);
+                console.log(data);
                 getImageIdsForQuiz(data);
             });
     }, []);

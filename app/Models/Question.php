@@ -35,7 +35,9 @@ class Question extends Model
         $locations = $quiz->locations->pluck('id');
         $difficulty = $quiz->difficulty->name;
 
-        $possibleCorrectMushrooms = Mushroom::with('edibility')
+        $possibleCorrectMushrooms = Mushroom::with('edibility', 'images')
+            ->withCount('images')
+            ->having('images_count', '>=', 4)
             ->whereIn('edibility_id', $edibilities)
             ->whereHas('locations', function($q) use($locations) {
             $q->whereIn('location_id', $locations);
@@ -75,6 +77,17 @@ class Question extends Model
 
             $question = [];
 
+            $images = $correctMushroom['images'];
+            $imageIds = [];
+            for ($i=0; $i<4; $i++) {
+                $randomIndex = rand(0, $images->count()-1);
+                array_push($imageIds, $images[$randomIndex]->image_id);
+                $images->splice($randomIndex, 1);
+            }
+
+            $question['image_ids'] = $imageIds;
+
+            $mushroomsInQuestionsArray = [];
             foreach ($mushroomsInQuestion as $mushroomInQuestion) {
                 $mushroomArray = [
                     'id' => $mushroomInQuestion->id,
@@ -86,11 +99,13 @@ class Question extends Model
                     'edibility_notes' => $mushroomInQuestion->edibility_notes,
                     'is_correct' => $mushroomInQuestion->id == $correctMushroom->id,
                 ];
+
                 
-                array_push($question, $mushroomArray);
+                array_push($mushroomsInQuestionsArray, $mushroomArray);
             }
 
-            shuffle($question);
+            shuffle($mushroomsInQuestionsArray);
+            $question['mushrooms'] = $mushroomsInQuestionsArray;
 
             array_push($questions, $question);
         }
