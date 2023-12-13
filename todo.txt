@@ -1,6 +1,7 @@
 TO DO
-- Make the quiz parameters in separate pages
-
+- ADD LARAVEL TESTS FOR API CALLS 
+    - make sure each mushroom has at least 2 images
+    - 
 
 FRONTEND
 - Quiz start
