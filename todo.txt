@@ -1,7 +1,4 @@
 TO DO
-- ADD LARAVEL TESTS FOR API CALLS 
-    - make sure each mushroom has at least 2 images
-    - 
 
 FRONTEND
 - Quiz start

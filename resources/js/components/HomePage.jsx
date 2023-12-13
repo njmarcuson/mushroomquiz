@@ -20,7 +20,7 @@ export default function HomePage() {
     return (
         <>
             <div className="fixed w-full top-0 pr-8 bg-cs-grey z-10">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-center mt-10 mb-5">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-center mt-6 mb-5">
                     Mushroom Quiz
                 </h1>
             </div>

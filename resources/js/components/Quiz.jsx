@@ -3,16 +3,8 @@ import { QuizContext } from '../context/QuizContext';
 import QuizQuestions from './QuizQuestions';
 
 function Quiz() {
-    const {
-        setQuiz,
-        quizSlug,
-        token,
-        isFirstQuestionLoaded,
-        setIsFirstQuestionLoaded,
-        setQuestionOrder,
-        setQuestionOn,
-        setTotalQuestionsLoaded,
-    } = useContext(QuizContext);
+    const { quiz, setQuiz, setQuestionOn, quizSlug, token } =
+        useContext(QuizContext);
 
     useEffect(() => {
         const data = {
@@ -30,56 +22,11 @@ function Quiz() {
             .then(response => response.json())
             .then(data => {
                 setQuiz(data);
-                console.log(data);
-                getImageIdsForQuiz(data);
+                setQuestionOn(0);
             });
     }, []);
 
-    function getImageIdsForQuiz(data) {
-        for (let i = 0; i < data.length; i++) {
-            getImageIdsForQuestion(data[i][0]['scientific_name'], i);
-        }
-    }
-
-    function getImageIdsForQuestion(scientificName, questionIndex) {
-        const url = `/api/getimages?scientific_name=${scientificName}`;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
-            .then(response => response.json())
-            .then(imageIds => {
-                addImagesToQuiz(imageIds, questionIndex);
-            });
-    }
-
-    let firstQuestionsImagesAdded = false;
-    function addImagesToQuiz(imageIds, questionIndex) {
-        if (firstQuestionsImagesAdded == false) {
-            console.log('HERE');
-            setQuestionOn(0);
-            setIsFirstQuestionLoaded(true);
-            firstQuestionsImagesAdded = true;
-        }
-
-        setTotalQuestionsLoaded(val => val + 1);
-
-        setQuestionOrder(previousQuestionOrder => {
-            previousQuestionOrder.push(questionIndex);
-            return previousQuestionOrder;
-        });
-        setQuiz(previousQuiz => {
-            previousQuiz[questionIndex]['4'] = imageIds;
-            console.log(questionIndex);
-            return previousQuiz;
-        });
-    }
-
-    return (
-        <div>{isFirstQuestionLoaded ? <QuizQuestions /> : 'Loading...'}</div>
-    );
+    return <div>{quiz ? <QuizQuestions /> : 'Loading...'}</div>;
 }
 
 export default Quiz;

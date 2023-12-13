@@ -4,8 +4,7 @@ import QuizQuestion from './QuizQuestion';
 import { CSSTransition } from 'react-transition-group';
 
 function QuizQuestions() {
-    const { quiz, questionOrder, questionOn, totalQuestionsLoaded } =
-        useContext(QuizContext);
+    const { quiz, questionOn } = useContext(QuizContext);
 
     const classNames = {
         appear: 'opacity-0 transition-opacity duration-300',
@@ -16,19 +15,11 @@ function QuizQuestions() {
         exitActive: 'transition-opacity duration-300 opacity-0',
     };
 
-    /*
-    TODO
-    create state for which question we're on
-    conditionally render question based on state
-    button for next question, updates state
-    css transitions similar to parameter questions
-    */
-
     const quizQuestions = [];
     for (let i = 0; i < quiz.length; i++) {
         quizQuestions.push(
             <CSSTransition
-                in={questionOrder[questionOn] == i}
+                in={questionOn == i}
                 timeout={300}
                 key={i}
                 classNames={classNames}
@@ -39,12 +30,7 @@ function QuizQuestions() {
         );
     }
 
-    return (
-        <div>
-            {questionOn < totalQuestionsLoaded && quizQuestions}
-            {questionOn == totalQuestionsLoaded && 'QUIZ LOADING'}
-        </div>
-    );
+    return <div>{quizQuestions}</div>;
 }
 
 export default QuizQuestions;
