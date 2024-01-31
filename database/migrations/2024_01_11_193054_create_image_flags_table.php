@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('question_mushrooms', function (Blueprint $table) {
+        Schema::create('image_flags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('question_id')->constrained();
-            $table->foreignId('mushroom_id')->constrained();
-            $table->tinyInteger('question_number');
-            $table->boolean('is_correct');
+            $table->foreignId('mushroom_image_id')->constrained();
+            $table->boolean('resolved')->default(false);
+            $table->integer('num_flags')->default(1);
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('question_mushrooms');
+        Schema::dropIfExists('image_flags');
     }
 };

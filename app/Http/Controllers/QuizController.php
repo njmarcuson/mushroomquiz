@@ -7,10 +7,10 @@ use App\Models\Edibility;
 use App\Models\Location;
 use App\Models\Quiz;
 use App\Traits\IsMobileUserTrait;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Stringable;
 
 class QuizController extends Controller
 {
@@ -21,14 +21,14 @@ class QuizController extends Controller
     public function index()
     {
         return view('app', [
-            'edibilities' => $this->addIsClicked(Edibility::all()),
-            'locations' => $this->addIsClicked(Location::all()),
-            'difficulties' => $this->addIsClicked(Difficulty::all()),
+            'edibilities' => $this->addIsClickedForJson(Edibility::all()),
+            'locations' => $this->addIsClickedForJson(Location::all()),
+            'difficulties' => $this->addIsClickedForJson(Difficulty::all()),
             'token' => csrf_token(),
         ]);
     }
 
-    private function addIsClicked(Collection $collection): string
+    private function addIsClickedForJson(Collection $collection): string
     {
         $arrays = $collection->toArray();
         for ($i=0; $i<count($arrays); $i++) {
@@ -40,30 +40,30 @@ class QuizController extends Controller
     }
 
     /**
-     * 
-     */
-    public function create()
-    {
-        
-    }
-
-    /**
      * Store a newly created quiz.
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'locations' => 'required',
+            'edibilities' => 'required',
+            'difficulty' => 'required',        
+        ]);
 
-        $locations = Location::find(explode(',', $request->get('locations')));
-        if ($locations->count() == 0) {
-            abort(404);
+        if ($validator->fails()) {
+            abort(422);
         }
 
-        $edibilities = Edibility::find(explode(',', $request->get('edibilities')));
-        if ($edibilities->count() == 0) {
-            abort(404);
-        }
+        $locations = Location::find(explode(',', $request->locations));
+        $edibilities = Edibility::find(explode(',', $request->edibilities));
+        $difficulty = Difficulty::find($request->difficulty);
 
-        $difficulty = Difficulty::find($request->get('difficulty'));
+        if ($locations->count() == 0 or
+            $edibilities->count() == 0 or
+            is_null($difficulty)) {
+            abort(422);
+        }
+        
         $quiz = Quiz::create([
             'slug' => uniqid() . Str::random(10),
             'difficulty_id' => $difficulty->id,
@@ -77,35 +77,4 @@ class QuizController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Quiz $quiz)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Quiz $quiz)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Quiz $quiz)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Quiz $quiz)
-    {
-        //
-    }
 }

@@ -35,6 +35,10 @@ export default function App(props) {
 
     const [questionOn, setQuestionOn] = useState();
 
+    const [flagImageId, setFlagImageId] = useState(false);
+
+    const [numberCorrect, setNumberCorrect] = useState();
+
     const queryClient = new QueryClient();
 
     useEffect(() => {
@@ -51,8 +55,12 @@ export default function App(props) {
                     setQuizSlug,
                     questionOn,
                     setQuestionOn,
+                    numberCorrect,
+                    setNumberCorrect,
                     currentPage,
                     setCurrentPage,
+                    flagImageId,
+                    setFlagImageId,
                     edibilities,
                     setEdibilities,
                     locations,

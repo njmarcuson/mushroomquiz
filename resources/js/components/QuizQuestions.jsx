@@ -1,36 +1,65 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { QuizContext } from '../context/QuizContext';
 import QuizQuestion from './QuizQuestion';
 import { CSSTransition } from 'react-transition-group';
+import QuizInstructions from './QuizInstructions';
+import FlagPopup from './FlagPopup';
+import getTransitionCssClasses from '../helperFunctions/getTransitionCssClasses';
 
 function QuizQuestions() {
-    const { quiz, questionOn } = useContext(QuizContext);
+    const showInstructionsInitially = !JSON.parse(
+        localStorage.getItem('hide-instructions')
+    );
 
-    const classNames = {
-        appear: 'opacity-0 transition-opacity duration-300',
-        appearActive: 'transition-opacity duration-300 opacity-100',
-        enter: 'opacity-0 -translate-x-full',
-        enterActive: 'transition-opacity duration-300 opacity-100',
-        // exit: "opacity-100",  // this breaks the exit transition
-        exitActive: 'transition-opacity duration-300 opacity-0',
-    };
+    const { quiz, questionOn, flagImageId } = useContext(QuizContext);
+    const [showInstructions, setShowInstructions] = useState(
+        showInstructionsInitially
+    );
 
-    const quizQuestions = [];
-    for (let i = 0; i < quiz.length; i++) {
-        quizQuestions.push(
+    return (
+        <>
             <CSSTransition
-                in={questionOn == i}
-                timeout={300}
-                key={i}
-                classNames={classNames}
+                in={showInstructions}
+                timeout={100}
+                classNames={getTransitionCssClasses()}
                 unmountOnExit
             >
-                <QuizQuestion questionIndex={i} />
+                <QuizInstructions setShowInstructions={setShowInstructions} />
             </CSSTransition>
-        );
-    }
 
-    return <div>{quizQuestions}</div>;
+            <CSSTransition
+                in={flagImageId}
+                timeout={100}
+                classNames={getTransitionCssClasses()}
+                unmountOnExit
+            >
+                <FlagPopup />
+            </CSSTransition>
+
+            <div
+                className={`${
+                    (showInstructions || flagImageId) &&
+                    'opacity-30 pointer-events-none'
+                }`}
+            >
+                <h2 className="text-xl md:text-2xl lg-text-4xl text-center mb-6 mt-10 font-bold">
+                    Question {questionOn + 1}/{quiz.length}
+                </h2>
+
+                {quiz.map((q, i) => (
+                    <CSSTransition
+                        in={questionOn == i}
+                        timeout={300}
+                        key={i}
+                        classNames={getTransitionCssClasses(true)}
+                        unmountOnExit
+                    >
+                        <QuizQuestion questionIndex={i} />
+                    </CSSTransition>
+                ))}
+            </div>
+        </>
+    );
 }
 
 export default QuizQuestions;

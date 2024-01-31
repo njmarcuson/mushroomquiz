@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('mushroom_id')->constrained();
             $table->string('image_id')->unique();
+            $table->boolean('is_bad')->default(false);
             $table->timestamps();
         });
     }

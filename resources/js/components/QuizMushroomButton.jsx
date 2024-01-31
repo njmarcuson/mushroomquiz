@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 QuizMushroomButton.propTypes = {
+    mushroomId: PropTypes.number.isRequired,
     scientificName: PropTypes.string.isRequired,
     popularName1: PropTypes.string,
     popularName2: PropTypes.string,
@@ -12,15 +13,13 @@ QuizMushroomButton.propTypes = {
 };
 
 export default function QuizMushroomButton(props) {
-    console.log('button rendered');
-
     let extraClassNames = '';
     if (!props.questionAnswered) {
         extraClassNames = 'opacity-40 hover:opacity-60';
     } else if (props.isCorrect) {
-        extraClassNames = 'text-cs-green';
+        extraClassNames = 'opacity-100';
     } else {
-        extraClassNames = 'text-cs-red';
+        extraClassNames = 'opacity-20';
     }
 
     return (
@@ -28,8 +27,8 @@ export default function QuizMushroomButton(props) {
             className={`parameter-button relative py-3 w-full font-semibold outline outline-2 outline-cs-darkred
                 shadow-2xl h-full z-40 text-lg relative transition-opacity
                 rounded-2xl hover:outline-3 ${extraClassNames}`}
-            id={props.scientificName}
-            onClick={e => props.answerQuestion(e)}
+            id={props.mushroomId}
+            onClick={() => props.answerQuestion(props.mushroomId)}
             disabled={props.questionAnswered}
         >
             <span className="">

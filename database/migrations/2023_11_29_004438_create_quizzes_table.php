@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->foreignId('difficulty_id')->constrained();
             $table->boolean('is_mobile');
-            $table->boolean('is_complete')->default(false);
             $table->timestamps();
         });
     }

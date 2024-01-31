@@ -1,28 +1,4 @@
 TO DO
-
-FRONTEND
-- Quiz start
-    - Options to select different locations and edibility
-    - Calls API to create quiz observation
-
-- Quiz during
-    - Each question is a component with visibility toggled on completion
-        - Each set of photos is a component
-        - Each answer option is a component
-    - Quiz state keeps track of number of correct questions
-    - Calls API to update quiz stats on each questions answer
-
-- Quiz end
-    - Displays funny image based on how the quiz went
-    - Calls API to mark is_complete=1
-    - Allows option to retake quiz
-
-BACKEND
-- API set up to get mushrooms for quiz
-    - takes in editability and location
-    - returns correct mushrooms and incorrect mushrooms for each question
-        - for correct mushrooms, returns edibility, edibility_notes, and location
-
-- Database to store quiz results
-    - Each quiz generates a quiz element with timestamp, is_complete, useragent, is_mobile
-    - Each answer generates a quiz_answer element with timestamp, correct_mushroom, incorrect_mushrooms, and mushroom_choice
+- Flag bad images
+    - Admin login where I can sort through the flagged images and determine which are bad
+    - Bad images do not get pulled
